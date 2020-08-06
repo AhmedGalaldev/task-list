@@ -13,6 +13,18 @@ loadEventListners();
 function loadEventListners() {
   // add task event
   form.addEventListener("submit", addTask);
+
+  // remove task event
+
+  taskList.addEventListener("click", removeTask);
+
+  // clear tasks event
+
+  clearTask.addEventListener("click", clearTasks);
+
+  // filter task event
+
+  filter.addEventListener("keyup", filterTasks);
 }
 
 // add task
@@ -39,7 +51,7 @@ function addTask(e) {
   const link = document.createElement("a");
 
   // add class to link
-  link.className = "float-right";
+  link.className = "delete-task float-right";
 
   //add icon html
 
@@ -54,4 +66,41 @@ function addTask(e) {
 
   // clear input
   formInput.value = "";
+}
+
+// remove task
+
+function removeTask(e) {
+  if (e.target.parentElement.classList.contains("delete-task")) {
+    if (confirm("Are you sure to remove this task?")) {
+      e.target.parentElement.parentElement.remove();
+    }
+  }
+}
+
+// clear tasks
+
+function clearTasks() {
+  // taskList.innerHTML = "";
+
+  // faster
+
+  while (taskList.firstChild) {
+    taskList.removeChild(taskList.firstChild);
+  }
+}
+
+// filter tasks
+
+function filterTasks(e) {
+  const text = e.target.value.toLowerCase();
+
+  document.querySelectorAll(".list-group-item").forEach(function (task) {
+    const item = task.firstChild.textContent;
+    if (item.toLowerCase().indexOf(text) != -1) {
+      task.style.display = "block";
+    } else {
+      task.style.display = "none";
+    }
+  });
 }
